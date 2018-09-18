@@ -1,14 +1,10 @@
-import java.awt.Color;
-import java.awt.GridLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 
 
@@ -20,21 +16,11 @@ public class ClasseMain {
 		Scanner scanner = new Scanner (System.in);
 		JFrame frame = new JFrame("FrameDemo");
 		
-		//Creation de la grille 
-		Grille grille = new Grille(10);
-		grille.show();
-		/*JPanel pan = new JPanel(new GridLayout(grille.size,grille.size));
-		Border blackline = BorderFactory.createLineBorder(Color.black,1);
-		for(int i=0;i < grille.size*grille.size;i++){
-			JPanel ptest = new JPanel();
-			ptest.setBorder(blackline);
-			pan.add(ptest);
-		}
-		pan.setBorder(blackline);
-		frame.add(pan);
-		frame.setVisible(true);*/
-		
-		
+		//Creation des grilles
+		int size = 9;
+		Grille grilleJ1 = new Grille(size);
+		Grille grilleJ2 = new Grille(size);
+		grilleJ1.show();
 		
 		//List qui va contenir tout les bateaux du jeux
 		List<Ship> shiplist = new ArrayList();
@@ -46,23 +32,35 @@ public class ClasseMain {
 		while(type<5){
 		//Création des 5 bateaux
 		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grille.size);
+		Ship ship = initShip(scanner,frame,type,joueur,grilleJ1.size);
 		shiplist.add(ship);
+		System.out.println("type :" + ship.type);
+		//Ajouter sur la grille
+		grilleJ1.add(ship);
+		grilleJ1.show();
 		}
+		
+		
+		
 		//init pour le joueur 2
+		grilleJ2.show();
 		System.out.println("Joueur 2:");
 		joueur = 2;
 		type =0;
 		while(type<5){
 		//Création des 5 bateaux
 		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grille.size);
+		Ship ship = initShip(scanner,frame,type,joueur,grilleJ2.size);
 		shiplist.add(ship);
+		grilleJ2.add(ship);
+		grilleJ2.show();
 		}
 		
 		//while(1)
 		System.out.println(shiplist);  
 	}  
+	
+	
 	//Permet de vérifier que la position soit inclue dans la grille
 	public static boolean checkPosition(JFrame frame,int position, int size){
 		if(position < 1 || position > size){
@@ -81,7 +79,7 @@ public class ClasseMain {
 			return true;
 		}
 	}
- //Initialise un bateau selon son type passé en paramètre
+	//Initialise un bateau selon son type passé en paramètre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, int size){
 		System.out.print("Entre la position X et Y (entre 0 et "+ size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
 		int posX = scanner.nextInt();
