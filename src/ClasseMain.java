@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -15,36 +17,35 @@ public class ClasseMain {
 		Grille grille = new Grille();
 		grille.size = 10;
 		System.out.println(grille.size);
-		
+		List<Ship> shiplist = new ArrayList();
 		//init pour le joueur 1
 		System.out.println("Joueur 1:");
 		int joueur = 1;
-		
-		//Porte-Avion
-		System.out.print("Entre la position X et Y (entre 0 et "+ grille.size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
-		int posX = scanner.nextInt();
-		while(checkPosition(frame,posX)==false){
-			posX = scanner.nextInt();
-		}	
-		int posY = scanner.nextInt();
-		while(checkPosition(frame,posY)==false){
-			posY = scanner.nextInt();
-		}	
-		int sens = scanner.nextInt();
-		while(checkSens(frame,sens)==false){
-			sens = scanner.nextInt();
+		int type =0;
+		while(type<5){
+		//Création des 5 bateaux
+		type++;
+		Ship ship = initShip(scanner,frame,type,joueur,grille.size);
+		shiplist.add(ship);
 		}
-		PorteAvion porteavionJ1 = new PorteAvion(posX,posY,sens,joueur);
-		//Croiseur
-		Croiseur croiseurJ1 = new Croiseur(5,8,0,1);
+		//init pour le joueur 2
+		System.out.println("Joueur 2:");
+		joueur = 2;
+		type =0;
+		while(type<5){
+		//Création des 5 bateaux
+		type++;
+		Ship ship = initShip(scanner,frame,type,joueur,grille.size);
+		shiplist.add(ship);
+		}
+		
 		//while(1)
-		System.out.println(porteavionJ1.sens);
-		System.out.println(croiseurJ1.name);  
+		System.out.println(shiplist);  
 	}  
 	//Permet de vérifier que la position soit inclue dans la grille
-	public static boolean checkPosition(JFrame frame,int position){
-		if(position < 1 || position > 10){
-			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et 10");
+	public static boolean checkPosition(JFrame frame,int position, int size){
+		if(position < 1 || position > size){
+			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+size);
 			return false;
 		}else{
 			return true;
@@ -58,5 +59,41 @@ public class ClasseMain {
 		}else{
 			return true;
 		}
+	}
+ //Initialise un bateau selon son type passé en paramètre
+	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, int size){
+		System.out.print("Entre la position X et Y (entre 0 et "+ size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+		int posX = scanner.nextInt();
+		while(checkPosition(frame,posX,size)==false){
+			posX = scanner.nextInt();
+		}	
+		int posY = scanner.nextInt();
+		while(checkPosition(frame,posY,size)==false){
+			posY = scanner.nextInt();
+		}	
+		int sens = scanner.nextInt();
+		while(checkSens(frame,sens)==false){
+			sens = scanner.nextInt();
+		}
+		Ship ship;
+		switch(type){
+		default:
+		case 1:
+			ship = new PorteAvion(posX,posY,sens,joueur);
+			break;
+		case 2:
+			ship = new Croiseur(posX,posY,sens,joueur);
+			break;
+		case 3:
+			ship = new ContreTorpilleur(posX,posY,sens,joueur);
+			break;
+		case 4:
+			ship = new SousMarin(posX,posY,sens,joueur);
+			break;
+		case 5:
+			ship = new Torpilleur(posX,posY,sens,joueur);
+			break;
+		}
+		return ship; 
 	}
 }

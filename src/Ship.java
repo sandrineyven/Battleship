@@ -1,7 +1,7 @@
 
 public abstract class Ship {
-	//id du bateau
-	int id;
+	//id correcpondant au type du bateau
+	int type;
 	//nom du bateau
 	String name;
 	//Longueur du bateau
