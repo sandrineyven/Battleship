@@ -1,9 +1,16 @@
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+
 
 
 public class ClasseMain {
@@ -14,10 +21,24 @@ public class ClasseMain {
 		JFrame frame = new JFrame("FrameDemo");
 		
 		//Creation de la grille 
-		Grille grille = new Grille();
-		grille.size = 10;
-		System.out.println(grille.size);
+		Grille grille = new Grille(10);
+		grille.show();
+		/*JPanel pan = new JPanel(new GridLayout(grille.size,grille.size));
+		Border blackline = BorderFactory.createLineBorder(Color.black,1);
+		for(int i=0;i < grille.size*grille.size;i++){
+			JPanel ptest = new JPanel();
+			ptest.setBorder(blackline);
+			pan.add(ptest);
+		}
+		pan.setBorder(blackline);
+		frame.add(pan);
+		frame.setVisible(true);*/
+		
+		
+		
+		//List qui va contenir tout les bateaux du jeux
 		List<Ship> shiplist = new ArrayList();
+		
 		//init pour le joueur 1
 		System.out.println("Joueur 1:");
 		int joueur = 1;
