@@ -42,7 +42,7 @@ public class Grille {
 			case 5: tag = " TO ";
 				break;
 		}
-		this.grille[ship.positionX][ship.positionY]= tag;
+		this.grille[ship.positionY][ship.positionX]= tag;
 		
 			for(int i =1;i<ship.longueur;i++){
 				if(ship.sens == 0){
@@ -53,4 +53,13 @@ public class Grille {
 			}
 	
 	}
+
+	public boolean cellIsEmpty(int x, int y){
+		if(this.grille[y][x] == "    "){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 }

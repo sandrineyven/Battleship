@@ -32,15 +32,12 @@ public class ClasseMain {
 		while(type<5){
 		//Création des 5 bateaux
 		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grilleJ1.size);
+		Ship ship = initShip(scanner,frame,type,joueur,grilleJ1);
 		shiplist.add(ship);
-		System.out.println("type :" + ship.type);
 		//Ajouter sur la grille
 		grilleJ1.add(ship);
 		grilleJ1.show();
 		}
-		
-		
 		
 		//init pour le joueur 2
 		grilleJ2.show();
@@ -50,7 +47,7 @@ public class ClasseMain {
 		while(type<5){
 		//Création des 5 bateaux
 		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grilleJ2.size);
+		Ship ship = initShip(scanner,frame,type,joueur,grilleJ2);
 		shiplist.add(ship);
 		grilleJ2.add(ship);
 		grilleJ2.show();
@@ -62,14 +59,53 @@ public class ClasseMain {
 	
 	
 	//Permet de vérifier que la position soit inclue dans la grille
-	public static boolean checkPosition(JFrame frame,int position, int size){
-		if(position < 1 || position > size){
-			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+size);
+	public static boolean checkOutOfGrid(JFrame frame,int position, Grille grille){
+		if(position < 1 || position > grille.size){
+			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+grille.size);
 			return false;
 		}else{
 			return true;
 		}
+	}	
+	
+	//Permet de vérifier les collisions
+	public static boolean detectCollision(JFrame frame,Ship ship, Grille grille){
+		//Case déjà occupée
+		if(!grille.cellIsEmpty(ship.positionX,ship.positionY)){
+			JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+			return true;
+		}
+		//Pour le sens horizontal
+		if(ship.sens == 0){
+			//Verification que le bateau ne dépasse pas
+			if(ship.positionX + ship.longueur - grille.size > 0){
+				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
+				return true;
+			}
+			//Vérification qu'il n'y a rien aux places prévues par le bateau
+			for(int i=ship.positionX+1;i<ship.longueur;i++){
+				if(!grille.cellIsEmpty(i, ship.positionY)){
+					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					return true;
+				}
+			}
+			//Meme chose pour le sens vertical
+		}else if(ship.sens == 1){
+			if(ship.positionY + ship.longueur-1 > grille.size){
+				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
+				return true;
+			}
+			for(int i=ship.positionY+1;i<ship.longueur;i++){
+				if(!grille.cellIsEmpty(i, ship.positionX)){
+					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
+	
+	//Permet de vérifié le sens
 	//Permet de vérifier que l'utilisateur choisi bien 1 ou 0
 	public static boolean checkSens(JFrame frame,int sens){
 		if(sens < 0 || sens > 1){
@@ -79,22 +115,29 @@ public class ClasseMain {
 			return true;
 		}
 	}
+	
+	//Initialisation des bateaux
 	//Initialise un bateau selon son type passé en paramètre
-	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, int size){
-		System.out.print("Entre la position X et Y (entre 0 et "+ size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
+		
+		System.out.print("Entre la position X et Y (entre 0 et "+ grille.size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+		//Position X
 		int posX = scanner.nextInt();
-		while(checkPosition(frame,posX,size)==false){
+		while(!checkOutOfGrid(frame,posX,grille)){
 			posX = scanner.nextInt();
-		}	
+		}
+		//Position Y
 		int posY = scanner.nextInt();
-		while(checkPosition(frame,posY,size)==false){
+		while(!checkOutOfGrid(frame,posY,grille)){
 			posY = scanner.nextInt();
-		}	
+		}
+		//Sens 
 		int sens = scanner.nextInt();
 		while(checkSens(frame,sens)==false){
 			sens = scanner.nextInt();
 		}
 		Ship ship;
+		//Selection du bon contructeur selon le type
 		switch(type){
 		default:
 		case 1:
@@ -113,6 +156,12 @@ public class ClasseMain {
 			ship = new Torpilleur(posX,posY,sens,joueur);
 			break;
 		}
-		return ship; 
+		//Détection des collision
+		if(detectCollision(frame,ship,grille)){
+			return initShip(scanner,frame,type,joueur,grille);
+		}else{
+			return ship;
+		}
 	}
+
 }
