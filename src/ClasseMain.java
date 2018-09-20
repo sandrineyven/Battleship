@@ -20,7 +20,6 @@ public class ClasseMain {
 		int size = 9;
 		Grille grilleJ1 = new Grille(size);
 		Grille grilleJ2 = new Grille(size);
-		grilleJ1.show();
 		
 		//List qui va contenir tout les bateaux du jeux
 		List<Ship> shiplist = new ArrayList();
@@ -28,33 +27,16 @@ public class ClasseMain {
 		//init pour le joueur 1
 		System.out.println("Joueur 1:");
 		int joueur = 1;
-		int type =0;
-		while(type<5){
-		//Création des 5 bateaux
-		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grilleJ1);
-		shiplist.add(ship);
-		//Ajouter sur la grille
-		grilleJ1.add(ship);
-		grilleJ1.show();
-		}
+		initPlayer(scanner,frame,joueur,grilleJ1);
 		
 		//init pour le joueur 2
-		grilleJ2.show();
 		System.out.println("Joueur 2:");
 		joueur = 2;
-		type =0;
-		while(type<5){
-		//Création des 5 bateaux
-		type++;
-		Ship ship = initShip(scanner,frame,type,joueur,grilleJ2);
-		shiplist.add(ship);
-		grilleJ2.add(ship);
-		grilleJ2.show();
-		}
+		initPlayer(scanner,frame,joueur,grilleJ2);
 		
+		//Boucle de jeu
 		//while(1)
-		System.out.println(shiplist);  
+  
 	}  
 	
 	
@@ -120,7 +102,7 @@ public class ClasseMain {
 	//Initialise un bateau selon son type passé en paramètre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
 		
-		System.out.print("Entre la position X et Y (entre 0 et "+ grille.size +") et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+		System.out.print("Entre la position X et Y (entre 0 et "+ grille.size +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
 		//Position X
 		int posX = scanner.nextInt();
 		while(!checkOutOfGrid(frame,posX,grille)){
@@ -161,6 +143,20 @@ public class ClasseMain {
 			return initShip(scanner,frame,type,joueur,grille);
 		}else{
 			return ship;
+		}
+	}
+
+	//Initialisation du joueur
+	public static void initPlayer(Scanner scanner, JFrame frame, int joueur, Grille grille){
+		grille.show();
+		joueur = 2;
+		int type =0;
+		while(type<5){
+		//Création des 5 bateaux
+		type++;
+		Ship ship = initShip(scanner,frame,type,joueur,grille);
+		grille.add(ship);
+		grille.show();
 		}
 	}
 
