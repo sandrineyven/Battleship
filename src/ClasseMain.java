@@ -28,15 +28,19 @@ public class ClasseMain {
 		System.out.println("Joueur 1:");
 		int joueur = 1;
 		initPlayer(scanner,frame,joueur,grilleJ1);
+		grilleJ1.showShipsAlive();
 		
 		//init pour le joueur 2
 		System.out.println("Joueur 2:");
 		joueur = 2;
 		initPlayer(scanner,frame,joueur,grilleJ2);
+		grilleJ2.showShipsAlive();
 		
 		//Boucle de jeu
 		//while(1)
-  
+		joueur = 1;
+		System.out.println("Joueur 1:");
+		
 	}  
 	
 	
@@ -118,6 +122,7 @@ public class ClasseMain {
 		while(checkSens(frame,sens)==false){
 			sens = scanner.nextInt();
 		}
+		//Factory
 		Ship ship;
 		//Selection du bon contructeur selon le type
 		switch(type){
@@ -138,6 +143,7 @@ public class ClasseMain {
 			ship = new Torpilleur(posX,posY,sens,joueur);
 			break;
 		}
+		//Fin de la factory
 		//Détection des collision
 		if(detectCollision(frame,ship,grille)){
 			return initShip(scanner,frame,type,joueur,grille);
@@ -149,13 +155,12 @@ public class ClasseMain {
 	//Initialisation du joueur
 	public static void initPlayer(Scanner scanner, JFrame frame, int joueur, Grille grille){
 		grille.show();
-		joueur = 2;
 		int type =0;
 		while(type<5){
 		//Création des 5 bateaux
 		type++;
 		Ship ship = initShip(scanner,frame,type,joueur,grille);
-		grille.add(ship);
+		grille.add(ship);//try catch
 		grille.show();
 		}
 	}
