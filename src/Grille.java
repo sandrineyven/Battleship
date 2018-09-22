@@ -2,11 +2,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Grille {
-	int size;
-	List <Ship> ships;
-	
+	private int size;
+	private List <Ship> ships;
 	private String[][] grille;
 	
+	
+	
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public List<Ship> getShips() {
+		return ships;
+	}
+
+	public void setShips(List<Ship> ships) {
+		this.ships = ships;
+	}
+
+	public String[][] getGrille() {
+		return grille;
+	}
+
+	public void setGrille(String[][] grille) {
+		this.grille = grille;
+	}
+
 	public Grille(int size){
 		this.size = size+1;
 		this.ships = new ArrayList<Ship>();
@@ -21,7 +46,7 @@ public class Grille {
 	}
 
 	//Permet d'afficher la grille
-	public void show(){
+	protected void show(){
 		System.out.println();
 		for(int i =0;i<this.size;i++){
 			for(int j=0;j<this.size;j++){
@@ -32,7 +57,7 @@ public class Grille {
 		System.out.println();
 	}
 
-	public void add(Ship ship){
+	protected void add(Ship ship){
 		String tag = "  ";
 		switch(ship.type){
 			case 1: tag = " PA ";
@@ -63,7 +88,7 @@ public class Grille {
 	
 	}
 
-	public boolean cellIsEmpty(int x, int y){
+	protected boolean cellIsEmpty(int x, int y){
 		if(this.grille[y][x] == "    "){
 			return true;
 		}else{
@@ -71,7 +96,7 @@ public class Grille {
 		}
 	}
 
-	public void showShipsAlive(){
+	protected void showShipsAlive(){
 		for(int i =0; i<ships.size();i++){
 		System.out.println(this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
 		}

@@ -9,4 +9,6 @@ public class PorteAvion extends Ship {
 		this.positionY = positionY;
 		this.sens = sens;
 	}
+	
+	
 }

@@ -46,8 +46,8 @@ public class ClasseMain {
 	
 	//Permet de vérifier que la position soit inclue dans la grille
 	public static boolean checkOutOfGrid(JFrame frame,int position, Grille grille){
-		if(position < 1 || position > grille.size){
-			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+grille.size);
+		if(position < 1 || position > grille.getSize()){
+			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+grille.getSize());
 			return false;
 		}else{
 			return true;
@@ -57,32 +57,32 @@ public class ClasseMain {
 	//Permet de vérifier les collisions
 	public static boolean detectCollision(JFrame frame,Ship ship, Grille grille){
 		//Case déjà occupée
-		if(!grille.cellIsEmpty(ship.positionX,ship.positionY)){
+		if(!grille.cellIsEmpty(ship.getPositionY(),ship.getPositionX())){
 			JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 			return true;
 		}
 		//Pour le sens horizontal
-		if(ship.sens == 0){
+		if(ship.getSens() == 0){
 			//Verification que le bateau ne dépasse pas
-			if(ship.positionX + ship.longueur - grille.size > 0){
+			if(ship.getPositionX() + ship.getLongueur() - grille.getSize() > 0){
 				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
 				return true;
 			}
 			//Vérification qu'il n'y a rien aux places prévues par le bateau
-			for(int i=ship.positionX+1;i<ship.longueur;i++){
-				if(!grille.cellIsEmpty(i, ship.positionY)){
+			for(int i=ship.getPositionX()+1;i<ship.getLongueur();i++){
+				if(!grille.cellIsEmpty(i, ship.getPositionX())){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
 			}
 			//Meme chose pour le sens vertical
-		}else if(ship.sens == 1){
-			if(ship.positionY + ship.longueur-1 > grille.size){
+		}else if(ship.getSens() == 1){
+			if(ship.getPositionY() + ship.getLongueur()-1 > grille.getSize()){
 				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
 				return true;
 			}
-			for(int i=ship.positionY+1;i<ship.longueur;i++){
-				if(!grille.cellIsEmpty(i, ship.positionX)){
+			for(int i=ship.getPositionX()+1;i<ship.getLongueur();i++){
+				if(!grille.cellIsEmpty(i, ship.getPositionX())){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
@@ -105,7 +105,7 @@ public class ClasseMain {
 	//Initialise un bateau selon son type passé en paramètre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
 		
-		System.out.print("Entre la position X et Y (entre 0 et "+ grille.size +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+		System.out.print("Entre la position X et Y (entre 0 et "+ grille.getSize() +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
 		//Position X
 		int posX = scanner.nextInt();
 		while(!checkOutOfGrid(frame,posX,grille)){
