@@ -102,7 +102,6 @@ public class ClasseMain {
 		}
 	}
 	
-	//Initialisation des bateaux
 	//Initialise un bateau selon son type passé en paramètre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
 		
