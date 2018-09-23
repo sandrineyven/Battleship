@@ -42,45 +42,45 @@ public class ClasseMain {
 		Grille grilleJoueur = grilleJ1;
 		Grille grilleAdverse = grilleJ2;
 		while(run){
-		System.out.println("Joueur "+joueur+" :");
-		grilleJoueur.show();
-		grilleJoueur.showShipsAlive();
-		//A faire: chosir un beteau pour tirer
-		//Récupération des coordonnées d'attaque
-		//A faire: prendre en compte de champ de tir
-		JOptionPane.showMessageDialog(frame,"Entre les coordonnées d'attaque X et Y");
-		int posAttaqueX = scanner.nextInt();
-		while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
-			posAttaqueX = scanner.nextInt();
-		}
-		int posAttaqueY = scanner.nextInt();
-		while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
-			posAttaqueY = scanner.nextInt();
-		}
-		
-		//Vérification sur la grille adverse
-		if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
-			System.out.println("A l'eau !");
-		}else{
-			System.out.println("Touché !");
-			//savoir quel bateau est touché et agir en conséquence
-			update(posAttaqueX, posAttaqueY, grilleAdverse);
-			if(grilleAdverse.getShips().isEmpty()){
-				System.out.println("Le joueur " + joueur + "a gagné !");
-				run = false;
+			System.out.println("Joueur "+joueur+" :");
+			grilleJoueur.show();
+			grilleJoueur.showShipsAlive();
+			//A faire: chosir un beteau pour tirer
+			//Récupération des coordonnées d'attaque
+			//A faire: prendre en compte de champ de tir
+			JOptionPane.showMessageDialog(frame,"Entre les coordonnées d'attaque X et Y");
+			int posAttaqueX = scanner.nextInt();
+			while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
+				posAttaqueX = scanner.nextInt();
 			}
-		}
-		//A Faire : bouger le bateau au choix
-		//Changement de joueurs
-		if(joueur == 1){
-			joueur =2;
-			grilleJoueur = grilleJ2;
-			grilleAdverse = grilleJ1;
-		}else{
-			joueur =1;
-			grilleJoueur = grilleJ1;
-			grilleAdverse = grilleJ2;
-		}
+			int posAttaqueY = scanner.nextInt();
+			while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
+				posAttaqueY = scanner.nextInt();
+			}
+		
+			//Vérification sur la grille adverse
+			if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
+				System.out.println("A l'eau !");
+			}else{
+				System.out.println("Touché !");
+				//savoir quel bateau est touché et agir en conséquence
+				update(posAttaqueX, posAttaqueY, grilleAdverse);
+				if(grilleAdverse.getShips().isEmpty()){
+					System.out.println("Le joueur " + joueur + "a gagné !");
+					run = false;
+				}
+			}
+			//A Faire : bouger le bateau au choix
+			//Changement de joueurs
+			if(joueur == 1){
+				joueur =2;
+				grilleJoueur = grilleJ2;
+				grilleAdverse = grilleJ1;
+			}else{
+				joueur =1;
+				grilleJoueur = grilleJ1;
+				grilleAdverse = grilleJ2;
+			}
 		}
 		
 	}  
