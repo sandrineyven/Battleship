@@ -21,9 +21,6 @@ public class ClasseMain {
 		Grille grilleJ1 = new Grille(size);
 		Grille grilleJ2 = new Grille(size);
 		
-		//List qui va contenir tout les bateaux du jeux
-		List<Ship> shiplist = new ArrayList();
-		
 		//init pour le joueur 1
 		System.out.println("Joueur 1:");
 		int joueur = 1;
@@ -48,7 +45,7 @@ public class ClasseMain {
 			//A faire: chosir un beteau pour tirer
 			//Récupération des coordonnées d'attaque
 			//A faire: prendre en compte de champ de tir
-			JOptionPane.showMessageDialog(frame,"Entre les coordonnées d'attaque X et Y");
+			System.out.println("Entre les coordonnées d'attaque X et Y");
 			int posAttaqueX = scanner.nextInt();
 			while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
 				posAttaqueX = scanner.nextInt();
@@ -99,7 +96,8 @@ public class ClasseMain {
 	//Permet de vérifier les collisions
 	public static boolean detectCollision(JFrame frame,Ship ship, Grille grille){
 		//Case déjà occupée
-		if(!grille.cellIsEmpty(ship.getPositionY(),ship.getPositionX())){
+		if(!grille.cellIsEmpty(ship.getPositionX(), ship.getPositionY()))
+		{
 			JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 			return true;
 		}
@@ -111,8 +109,8 @@ public class ClasseMain {
 				return true;
 			}
 			//Vérification qu'il n'y a rien aux places prévues par le bateau
-			for(int i=ship.getPositionX()+1;i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(i, ship.getPositionX())){
+			for(int i=ship.getPositionX()+1;i<ship.getLongueur()+ship.getPositionX();i++){
+				if(grille.getGrille()[i][ship.getPositionY()]!="    "){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
@@ -123,8 +121,8 @@ public class ClasseMain {
 				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
 				return true;
 			}
-			for(int i=ship.getPositionX()+1;i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(i, ship.getPositionX())){
+			for(int i=ship.getPositionY()+1;i<ship.getLongueur()+ship.getPositionY();i++){
+				if(grille.getGrille()[ship.getPositionX()][i]!="    "){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
@@ -186,7 +184,8 @@ public class ClasseMain {
 		}
 		//Fin de la factory
 		//Détection des collision
-		if(detectCollision(frame,ship,grille)){
+		boolean temp = detectCollision(frame,ship,grille);
+		if(temp){
 			return initShip(scanner,frame,type,joueur,grille);
 		}else{
 			return ship;
@@ -196,19 +195,19 @@ public class ClasseMain {
 	//Initialisation du joueur
 	public static void initPlayer(Scanner scanner, JFrame frame, int joueur, Grille grille){
 		grille.show();
-		int type =0;
-		while(type<5){
+		int type =1;
+		while(type<6){
 		//Création des 5 bateaux
-		type++;
 		Ship ship = initShip(scanner,frame,type,joueur,grille);
 		grille.add(ship);//try catch
 		grille.show();
+		type++;
 		}
 	}
 
 	
 	public static void update(int x, int y, Grille grille){
-		String tag = grille.getGrille()[y][x];
+		String tag = grille.getGrille()[x][y];
 		switch(tag){
 		case " PA ":
 			updatePdvByType(grille, 1);
@@ -226,10 +225,10 @@ public class ClasseMain {
 			updatePdvByType(grille, 5);
 			break;
 		}
-		grille.getGrille()[y][x] ="    ";
+		grille.getGrille()[x][y] ="    ";
 	}
 	
-	//Enlève les poitn de vie et retire le bateau de la liste di nécessaire
+	//Enlève les points de vie et retire le bateau de la liste si nécessaire
 	//Selon le type de bateau
 	public static void updatePdvByType(Grille grille, int type){
 		int index =0;
@@ -238,11 +237,45 @@ public class ClasseMain {
 				ship.setPointsdevie(ship.getPointsdevie()-1);
 				if(ship.getPointsdevie() == 0){
 					grille.getShips().remove(index);
+
+					//Efface tout le bateau sur ligne ou colonne
+					supprimerBateau(grille,type);
+					
 					System.out.println("Le " + ship.getName() + "a été détruit");
 				}
 				break;
 			};
 			index++;
 		};
+	}
+	public static String IntEnBateau(int i)
+	{
+		switch(i)
+		{
+		case 1 :
+			return " PA ";
+		case 2 :
+			return " CR ";
+		case 3 : 
+			return " CT ";
+		case 4 : 
+			return " SM ";
+		default :
+			return " TO ";
+		
+		}
+	}
+	public static void supprimerBateau(Grille grille,int type)
+	{
+		for(int y=1;y<grille.getSize();y++)
+		{
+			for(int x=1;x<grille.getSize();x++)
+			{
+				String temp1=grille.getGrille()[x][y];
+				String temp2 = IntEnBateau(type);
+				if(grille.getGrille()[x][y]==IntEnBateau(type))
+					grille.deleteCell(x,y);
+			}
+		}
 	}
 }

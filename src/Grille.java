@@ -28,19 +28,16 @@ public class Grille {
 		return grille;
 	}
 
-	public void setGrille(String[][] grille) {
-		this.grille = grille;
-	}
 
 	public Grille(int size){
 		this.size = size+1;
 		this.ships = new ArrayList<Ship>();
 		this.grille = new String[size+1][size+1];
-		for(int i =0;i<this.size;i++){
-			for(int j=0;j<this.size;j++){
-				grille[i][j]= "    ";
-				grille[0][j]= "  " + j + " ";
-				grille[i][0]= "  " + i + " ";
+		for(int y =0;y<this.size;y++){
+			for(int x=0;x<this.size;x++){
+				grille[x][y]= "    ";
+				grille[0][y]= "  " + y + " ";
+				grille[x][0]= "  " + x + " ";
 			}
 		}
 	}
@@ -48,9 +45,9 @@ public class Grille {
 	//Permet d'afficher la grille
 	protected void show(){
 		System.out.println();
-		for(int i =0;i<this.size;i++){
-			for(int j=0;j<this.size;j++){
-				System.out.print(" | " + this.grille[i][j]);
+		for(int y =0;y<this.size;y++){
+			for(int x=0;x<this.size;x++){
+				System.out.print(" | " + this.grille[x][y]);
 			}
 			System.out.println(" | ");
 		}
@@ -76,20 +73,20 @@ public class Grille {
 				this.ships.add(ship);
 				break;
 		}
-		this.grille[ship.positionY][ship.positionX]= tag;
+		this.grille[ship.positionX][ship.positionY]= tag;
 		
 			for(int i =1;i<ship.longueur;i++){
 				if(ship.sens == 0){
-					this.grille[ship.positionY][ship.positionX+i]= tag;
+					this.grille[ship.positionX+i][ship.positionY]= tag;
 				}else{
-					this.grille[ship.positionY+i][ship.positionX]= tag;
+					this.grille[ship.positionX][ship.positionY+i]= tag;
 				}
 			}
 	
 	}
 
 	protected boolean cellIsEmpty(int x, int y){
-		if(this.grille[y][x] == "    "){
+		if(this.grille[x][y] == "    "){
 			return true;
 		}else{
 			return false;
@@ -100,5 +97,10 @@ public class Grille {
 		for(int i =0; i<ships.size();i++){
 		System.out.println(this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
 		}
+	}
+
+	protected void deleteCell(int x, int y)
+	{
+		this.grille[x][y]="    ";
 	}
 }
