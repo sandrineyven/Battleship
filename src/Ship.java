@@ -9,7 +9,7 @@ public abstract class Ship {
 	//longueur du champ de tir
 	int champdetir;
 	//Nombre de points de vie (2 pour chaques bateaux)
-	int pointsdevie =2;
+	int pointsdevie = Constante.pointsDeVie;
 	//Position sur la grille de l'avant du bateau
 	int positionX;
 	int positionY;

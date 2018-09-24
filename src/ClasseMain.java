@@ -1,12 +1,7 @@
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-
 
 
 public class ClasseMain {
@@ -17,7 +12,7 @@ public class ClasseMain {
 		JFrame frame = new JFrame("FrameDemo");
 		
 		//Creation des grilles
-		int size = 9;
+		int size = Constante.gridSize;
 		Grille grilleJ1 = new Grille(size);
 		Grille grilleJ2 = new Grille(size);
 		
@@ -110,7 +105,7 @@ public class ClasseMain {
 			}
 			//Vérification qu'il n'y a rien aux places prévues par le bateau
 			for(int i=ship.getPositionX()+1;i<ship.getLongueur()+ship.getPositionX();i++){
-				if(grille.getGrille()[i][ship.getPositionY()]!="    "){
+				if(grille.getGrille()[i][ship.getPositionY()]!=Constante.emptyCell){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
@@ -122,7 +117,7 @@ public class ClasseMain {
 				return true;
 			}
 			for(int i=ship.getPositionY()+1;i<ship.getLongueur()+ship.getPositionY();i++){
-				if(grille.getGrille()[ship.getPositionX()][i]!="    "){
+				if(grille.getGrille()[ship.getPositionX()][i]!=Constante.emptyCell){
 					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
 					return true;
 				}
@@ -209,23 +204,23 @@ public class ClasseMain {
 	public static void update(int x, int y, Grille grille){
 		String tag = grille.getGrille()[x][y];
 		switch(tag){
-		case " PA ":
+		case Constante.tag_pa:
 			updatePdvByType(grille, 1);
 			break;
-		case " CR ":
+		case Constante.tag_cr:
 			updatePdvByType(grille, 2);
 			break;
-		case " CT ":
+		case Constante.tag_ct:
 			updatePdvByType(grille, 3);
 			break;
-		case " SM ":
+		case Constante.tag_sm:
 			updatePdvByType(grille, 4);
 			break;
-		case " TO ":
+		case Constante.tag_to:
 			updatePdvByType(grille, 5);
 			break;
 		}
-		grille.getGrille()[x][y] ="    ";
+		grille.getGrille()[x][y] =Constante.emptyCell;
 	}
 	
 	//Enlève les points de vie et retire le bateau de la liste si nécessaire
@@ -239,7 +234,7 @@ public class ClasseMain {
 					grille.getShips().remove(index);
 
 					//Efface tout le bateau sur ligne ou colonne
-					supprimerBateau(grille,type);
+					deleteShip(grille,type);
 					
 					System.out.println("Le " + ship.getName() + "a été détruit");
 				}
@@ -248,33 +243,29 @@ public class ClasseMain {
 			index++;
 		};
 	}
-	public static String IntEnBateau(int i)
+	public static String intToShip(int i)
 	{
 		switch(i)
 		{
 		case 1 :
-			return " PA ";
+			return Constante.tag_pa;
 		case 2 :
-			return " CR ";
+			return Constante.tag_cr;
 		case 3 : 
-			return " CT ";
+			return Constante.tag_ct;
 		case 4 : 
-			return " SM ";
+			return Constante.tag_sm;
 		default :
-			return " TO ";
+			return Constante.tag_to;
 		
 		}
 	}
-	public static void supprimerBateau(Grille grille,int type)
-	{
-		for(int y=1;y<grille.getSize();y++)
-		{
-			for(int x=1;x<grille.getSize();x++)
-			{
-				String temp1=grille.getGrille()[x][y];
-				String temp2 = IntEnBateau(type);
-				if(grille.getGrille()[x][y]==IntEnBateau(type))
+	public static void deleteShip(Grille grille,int type){
+		for(int y=1;y<grille.getSize();y++){
+			for(int x=1;x<grille.getSize();x++){
+				if(grille.getGrille()[x][y]==intToShip(type)){
 					grille.deleteCell(x,y);
+				}
 			}
 		}
 	}

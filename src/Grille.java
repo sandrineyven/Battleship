@@ -6,8 +6,6 @@ public class Grille {
 	private List <Ship> ships;
 	private String[][] grille;
 	
-	
-	
 	public int getSize() {
 		return size;
 	}
@@ -35,7 +33,7 @@ public class Grille {
 		this.grille = new String[size+1][size+1];
 		for(int y =0;y<this.size;y++){
 			for(int x=0;x<this.size;x++){
-				grille[x][y]= "    ";
+				grille[x][y]= Constante.emptyCell;
 				grille[0][y]= "  " + y + " ";
 				grille[x][0]= "  " + x + " ";
 			}
@@ -57,19 +55,19 @@ public class Grille {
 	protected void add(Ship ship){
 		String tag = "  ";
 		switch(ship.type){
-			case 1: tag = " PA ";
+			case 1: tag = Constante.tag_pa;
 				this.ships.add(ship);
 				break;
-			case 2: tag = " CR ";
+			case 2: tag = Constante.tag_cr;
 				this.ships.add(ship);
 				break;
-			case 3: tag = " CT ";
+			case 3: tag = Constante.tag_ct;
 				this.ships.add(ship);
 				break;
-			case 4: tag = " SM ";
+			case 4: tag = Constante.tag_sm;
 				this.ships.add(ship);
 				break;
-			case 5: tag = " TO ";
+			case 5: tag = Constante.tag_to;
 				this.ships.add(ship);
 				break;
 		}
@@ -86,7 +84,7 @@ public class Grille {
 	}
 
 	protected boolean cellIsEmpty(int x, int y){
-		if(this.grille[x][y] == "    "){
+		if(this.grille[x][y] == Constante.emptyCell){
 			return true;
 		}else{
 			return false;
@@ -101,6 +99,6 @@ public class Grille {
 
 	protected void deleteCell(int x, int y)
 	{
-		this.grille[x][y]="    ";
+		this.grille[x][y]=Constante.emptyCell;
 	}
 }
