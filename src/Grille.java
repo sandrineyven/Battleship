@@ -93,7 +93,8 @@ public class Grille {
 
 	protected void showShipsAlive(){
 		for(int i =0; i<ships.size();i++){
-		System.out.println(this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
+			int j=i+1;
+			System.out.println("(" + j + ")" + this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
 		}
 	}
 

@@ -20,14 +20,12 @@ public class ClasseMain {
 		System.out.println("Joueur 1:");
 		int joueur = 1;
 		initPlayer(scanner,frame,joueur,grilleJ1);
-		grilleJ1.showShipsAlive();
 
 		//init pour le joueur 2
-
+		clear();
 		System.out.println("Joueur 2:");
 		joueur = 2;
 		initPlayer(scanner,frame,joueur,grilleJ2);
-		grilleJ2.showShipsAlive();
 		clear();
 		
 		//Boucle de jeu
@@ -57,7 +55,8 @@ public class ClasseMain {
 			//Vérification sur la grille adverse
 			if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
 				System.out.println("A l'eau !");
-				sleep();
+				Ship ship = pickShip(scanner, grilleJoueur);
+				System.out.println(ship.name);
 			}else{
 				System.out.println("Touché !");
 				//savoir quel bateau est touché et agir en conséquence
@@ -278,6 +277,24 @@ public class ClasseMain {
 			}
 		}
 	}
+	public static Ship pickShip(Scanner scanner, Grille grille){
+		System.out.println("Voulez-vous bouger un bateau ? y/n");
+		String answer = scanner.next();
+		int indexShip = 99;
+		if(answer.substring(0, 1).equals("y")){
+			//Choix du bateau
+			while(indexShip>grille.getShips().size()){
+				System.out.println("Lequel ? (Entrez le chiffre correspondant):");
+				grille.showShipsAlive();
+				indexShip = scanner.nextInt();
+			}
+			Ship ship = grille.getShips().get(indexShip-1);
+			return ship;
+		}else{
+			return null;
+		}
+	}
+	//Console
 	public static void sleep(){
 		try {
 			Thread.sleep(Constante.timeSleep);

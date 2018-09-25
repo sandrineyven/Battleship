@@ -12,6 +12,6 @@ public class Constante {
 	//taille de la grille
 	public static final int gridSize = 9;
 	public static final int pointsDeVie = 2;
-	public static final int timeSleep = 2000;
+	public static final int timeSleep = 1500;
 	
 }
