@@ -98,8 +98,150 @@ public class Grille {
 		}
 	}
 
+	public boolean checkMoveZ(Ship ship, int delta){
+		if(ship.getPositionY()-delta < 0){
+			return false;
+		}
+		if(ship.getSens()==0){
+			for(int i = ship.getPositionX();i<ship.getLongueur();i++){
+				if(!this.cellIsEmpty(i,ship.getPositionY()-delta)){
+					return false;
+				}
+			}
+		}else if(ship.getSens()==1){
+			if(!this.cellIsEmpty(ship.getPositionX(),ship.getPositionY()-delta)){
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean checkMoveQ(Ship ship, int delta){
+		if(ship.getPositionX()-delta < 0){
+			return false;
+		}
+		if(ship.getSens()==1){
+			for(int i = ship.getPositionY();i<ship.getLongueur();i++){
+				if(!this.cellIsEmpty(ship.getPositionX()-delta,i)){
+					return false;
+				}
+			}
+		}else if(ship.getSens()==0){
+			if(!this.cellIsEmpty(ship.getPositionX()-delta,ship.getPositionY())){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkMoveS(Ship ship, int delta){
+		if(ship.getPositionY()+delta > this.getSize()){
+			return false;
+		}
+		if(ship.getSens()==0){
+			for(int i = ship.getPositionX();i<ship.getLongueur();i++){
+				if(!this.cellIsEmpty(i,ship.getPositionY()+delta)){
+					return false;
+				}
+			}
+		}else if(ship.getSens()==1){
+			if(!this.cellIsEmpty(ship.getPositionX(),ship.getPositionY()+delta+ship.getLongueur()-1)){
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean checkMoveD(Ship ship, int delta){
+		if(ship.getPositionX()+delta > this.getSize()){
+			return false;
+		}
+		if(ship.getSens()==1){
+			for(int i = ship.getPositionY();i<ship.getLongueur();i++){
+				if(!this.cellIsEmpty(ship.getPositionX()+delta,i)){
+					return false;
+				}
+			}
+		}else if(ship.getSens()==0){
+			if(!this.cellIsEmpty(ship.getPositionX()+delta+ship.getLongueur()-1,ship.getPositionY())){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	protected void deleteCell(int x, int y)
 	{
 		this.grille[x][y]=Constante.emptyCell;
+	}
+	
+	public void deleteShip(int type){
+		for(int y=1;y<this.getSize();y++){
+			for(int x=1;x<this.getSize();x++){
+				if(this.getGrille()[x][y]==intToShip(type)){
+					this.deleteCell(x,y);
+				}
+			}
+		}
+	}
+	
+	public String intToShip(int i)
+	{
+		switch(i)
+		{
+		case 1 :
+			return Constante.tag_pa;
+		case 2 :
+			return Constante.tag_cr;
+		case 3 : 
+			return Constante.tag_ct;
+		case 4 : 
+			return Constante.tag_sm;
+		default :
+			return Constante.tag_to;
+		
+		}
+	}
+
+
+	public void update(int x, int y){
+		String tag = this.getGrille()[x][y];
+		switch(tag){
+		case Constante.tag_pa:
+			updatePdvByType(1);
+			break;
+		case Constante.tag_cr:
+			updatePdvByType(2);
+			break;
+		case Constante.tag_ct:
+			updatePdvByType(3);
+			break;
+		case Constante.tag_sm:
+			updatePdvByType(4);
+			break;
+		case Constante.tag_to:
+			updatePdvByType(5);
+			break;
+		}
+		this.getGrille()[x][y] =Constante.emptyCell;
+	}
+	
+	//Enlève les points de vie et retire le bateau de la liste si nécessaire
+	//Selon le type de bateau
+	public void updatePdvByType(int type){
+		int index =0;
+		for (Ship ship : this.getShips()){
+			if(ship.getType() == type){
+				ship.setPointsdevie(ship.getPointsdevie()-1);
+				if(ship.getPointsdevie() == 0){
+					this.getShips().remove(index);
+
+					//Efface tout le bateau sur ligne ou colonne
+					this.deleteShip(type);
+					
+					System.out.println("Le " + ship.getName() + "a été détruit");
+				}
+				break;
+			};
+			index++;
+		};
 	}
 }

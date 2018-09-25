@@ -39,7 +39,15 @@ public class ClasseMain {
 			System.out.println("Joueur "+joueur+" :");
 			grilleJoueur.show();
 			grilleJoueur.showShipsAlive();
-			//A faire: chosir un beteau pour tirer
+			//Choix du bateau pour tirer
+			int indexShip = 99;
+			while(indexShip>grilleJoueur.getShips().size()){
+				System.out.println("Quel bateau pour tirer ? (Entrez le chiffre correspondant):");
+				indexShip = scanner.nextInt();
+			}
+			//A utiliser pour les champ de tir:
+			Ship choosenShip = grilleJoueur.getShips().get(indexShip-1);
+			
 			//Récupération des coordonnées d'attaque
 			//A faire: prendre en compte de champ de tir
 			System.out.println("Entre les coordonnées d'attaque X et Y");
@@ -55,6 +63,7 @@ public class ClasseMain {
 			//Vérification sur la grille adverse
 			if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
 				System.out.println("A l'eau !");
+				//bouger le bateau au choix
 				Ship ship = pickShip(scanner, grilleJoueur);
 				if(ship != null){
 					 moveShip(scanner,grilleJoueur,ship);
@@ -62,19 +71,20 @@ public class ClasseMain {
 			}else{
 				System.out.println("Touché !");
 				//savoir quel bateau est touché et agir en conséquence
-				update(posAttaqueX, posAttaqueY, grilleAdverse);
+				grilleAdverse.update(posAttaqueX, posAttaqueY);
 				if(grilleAdverse.getShips().isEmpty()){
 					System.out.println("Le joueur " + joueur + " a gagné !");
 					sleep();
 					run = false;
 				}else{
+					//bouger le bateau au choix
 					Ship ship = pickShip(scanner, grilleJoueur);
 					if(ship != null){
 						 moveShip(scanner,grilleJoueur,ship);
 					}
 				}
 			}
-			//A Faire : bouger le bateau au choix
+			
 			//Changement de joueurs
 			if(joueur == 1){
 				joueur =2;
@@ -213,75 +223,7 @@ public class ClasseMain {
 		}
 	}
 
-	
-	public static void update(int x, int y, Grille grille){
-		String tag = grille.getGrille()[x][y];
-		switch(tag){
-		case Constante.tag_pa:
-			updatePdvByType(grille, 1);
-			break;
-		case Constante.tag_cr:
-			updatePdvByType(grille, 2);
-			break;
-		case Constante.tag_ct:
-			updatePdvByType(grille, 3);
-			break;
-		case Constante.tag_sm:
-			updatePdvByType(grille, 4);
-			break;
-		case Constante.tag_to:
-			updatePdvByType(grille, 5);
-			break;
-		}
-		grille.getGrille()[x][y] =Constante.emptyCell;
-	}
-	
-	//Enlève les points de vie et retire le bateau de la liste si nécessaire
-	//Selon le type de bateau
-	public static void updatePdvByType(Grille grille, int type){
-		int index =0;
-		for (Ship ship : grille.getShips()){
-			if(ship.getType() == type){
-				ship.setPointsdevie(ship.getPointsdevie()-1);
-				if(ship.getPointsdevie() == 0){
-					grille.getShips().remove(index);
-
-					//Efface tout le bateau sur ligne ou colonne
-					deleteShip(grille,type);
-					
-					System.out.println("Le " + ship.getName() + "a été détruit");
-				}
-				break;
-			};
-			index++;
-		};
-	}
-	public static String intToShip(int i)
-	{
-		switch(i)
-		{
-		case 1 :
-			return Constante.tag_pa;
-		case 2 :
-			return Constante.tag_cr;
-		case 3 : 
-			return Constante.tag_ct;
-		case 4 : 
-			return Constante.tag_sm;
-		default :
-			return Constante.tag_to;
-		
-		}
-	}
-	public static void deleteShip(Grille grille,int type){
-		for(int y=1;y<grille.getSize();y++){
-			for(int x=1;x<grille.getSize();x++){
-				if(grille.getGrille()[x][y]==intToShip(type)){
-					grille.deleteCell(x,y);
-				}
-			}
-		}
-	}
+	//Bouger le beteau
 	public static Ship pickShip(Scanner scanner, Grille grille){
 		System.out.println("Voulez-vous bouger un bateau ? (y pour oui)1");
 		String answer = scanner.next();
@@ -309,11 +251,11 @@ public class ClasseMain {
 		}
 		switch(answer){
 			case "z": 
-				if(!checkMoveZ(grille,ship,delta)){
+				if(!grille.checkMoveZ(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
-					deleteShip(grille,ship.getType());
+					grille.deleteShip(ship.getType());
 					ship.setPositionY(ship.getPositionY()-delta);
 					grille.add(ship);
 					grille.show();
@@ -322,11 +264,11 @@ public class ClasseMain {
 				break;
 
 			case "q":
-				if(!checkMoveQ(grille,ship,delta)){
+				if(!grille.checkMoveQ(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
-					deleteShip(grille,ship.getType());
+					grille.deleteShip(ship.getType());
 					ship.setPositionX(ship.getPositionX()-delta);
 					grille.add(ship);
 					grille.show();
@@ -334,11 +276,11 @@ public class ClasseMain {
 				}
 				break;
 			case "s":
-				if(!checkMoveS(grille,ship,delta)){
+				if(!grille.checkMoveS(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
-					deleteShip(grille,ship.getType());
+					grille.deleteShip(ship.getType());
 					ship.setPositionY(ship.getPositionY()+delta);
 					grille.add(ship);
 					grille.show();
@@ -347,11 +289,11 @@ public class ClasseMain {
 				break;
 				
 			case "d":
-				if(!checkMoveD(grille,ship,delta)){
+				if(!grille.checkMoveD(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
-					deleteShip(grille,ship.getType());
+					grille.deleteShip(ship.getType());
 					ship.setPositionX(ship.getPositionX()+delta);
 					grille.add(ship);
 					grille.show();
@@ -365,76 +307,6 @@ public class ClasseMain {
 		}
 	}
 
-	public static boolean checkMoveZ(Grille grille, Ship ship, int delta){
-		if(ship.getPositionY()-delta < 0){
-			return false;
-		}
-		if(ship.getSens()==0){
-			for(int i = ship.getPositionX();i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(i,ship.getPositionY()-delta)){
-					return false;
-				}
-			}
-		}else if(ship.getSens()==1){
-			if(!grille.cellIsEmpty(ship.getPositionX(),ship.getPositionY()-delta)){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public static boolean checkMoveQ(Grille grille, Ship ship, int delta){
-		if(ship.getPositionX()-delta < 0){
-			return false;
-		}
-		if(ship.getSens()==1){
-			for(int i = ship.getPositionY();i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(ship.getPositionX()-delta,i)){
-					return false;
-				}
-			}
-		}else if(ship.getSens()==0){
-			if(!grille.cellIsEmpty(ship.getPositionX()-delta,ship.getPositionY())){
-				return false;
-			}
-		}
-		return true;
-	}
-	public static boolean checkMoveS(Grille grille, Ship ship, int delta){
-		if(ship.getPositionY()+delta > grille.getSize()){
-			return false;
-		}
-		if(ship.getSens()==0){
-			for(int i = ship.getPositionX();i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(i,ship.getPositionY()+delta)){
-					return false;
-				}
-			}
-		}else if(ship.getSens()==1){
-			if(!grille.cellIsEmpty(ship.getPositionX(),ship.getPositionY()+delta+ship.getLongueur()-1)){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public static boolean checkMoveD(Grille grille, Ship ship, int delta){
-		if(ship.getPositionX()+delta > grille.getSize()){
-			return false;
-		}
-		if(ship.getSens()==1){
-			for(int i = ship.getPositionY();i<ship.getLongueur();i++){
-				if(!grille.cellIsEmpty(ship.getPositionX()+delta,i)){
-					return false;
-				}
-			}
-		}else if(ship.getSens()==0){
-			if(!grille.cellIsEmpty(ship.getPositionX()+delta+ship.getLongueur()-1,ship.getPositionY())){
-				return false;
-			}
-		}
-		return true;
-	}
 	
 	//Console
 	public static void sleep(){
