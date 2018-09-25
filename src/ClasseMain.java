@@ -21,19 +21,23 @@ public class ClasseMain {
 		int joueur = 1;
 		initPlayer(scanner,frame,joueur,grilleJ1);
 		grilleJ1.showShipsAlive();
-		
+
 		//init pour le joueur 2
+
 		System.out.println("Joueur 2:");
 		joueur = 2;
 		initPlayer(scanner,frame,joueur,grilleJ2);
 		grilleJ2.showShipsAlive();
+		clear();
 		
 		//Boucle de jeu
 		boolean run = true;
 		joueur = 1;
 		Grille grilleJoueur = grilleJ1;
 		Grille grilleAdverse = grilleJ2;
+		clear();
 		while(run){
+			clear();
 			System.out.println("Joueur "+joueur+" :");
 			grilleJoueur.show();
 			grilleJoueur.showShipsAlive();
@@ -49,16 +53,20 @@ public class ClasseMain {
 			while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
 				posAttaqueY = scanner.nextInt();
 			}
-		
+			
 			//Vérification sur la grille adverse
 			if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
 				System.out.println("A l'eau !");
+				sleep();
 			}else{
 				System.out.println("Touché !");
 				//savoir quel bateau est touché et agir en conséquence
 				update(posAttaqueX, posAttaqueY, grilleAdverse);
+				sleep();
+				clear();
 				if(grilleAdverse.getShips().isEmpty()){
-					System.out.println("Le joueur " + joueur + "a gagné !");
+					System.out.println("Le joueur " + joueur + " a gagné !");
+					sleep();
 					run = false;
 				}
 			}
@@ -189,6 +197,7 @@ public class ClasseMain {
 
 	//Initialisation du joueur
 	public static void initPlayer(Scanner scanner, JFrame frame, int joueur, Grille grille){
+		
 		grille.show();
 		int type =1;
 		while(type<6){
@@ -268,5 +277,15 @@ public class ClasseMain {
 				}
 			}
 		}
+	}
+	public static void sleep(){
+		try {
+			Thread.sleep(Constante.timeSleep);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void clear(){
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 }
