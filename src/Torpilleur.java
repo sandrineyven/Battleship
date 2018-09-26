@@ -1,4 +1,5 @@
 
+
 public class Torpilleur extends Ship{
 	public Torpilleur(int positionX, int positionY, int sens, int joueur){
 		this.type = 5;

@@ -1,12 +1,11 @@
-
+import java.io.IOException;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
 public class ClasseMain {
-	public static void main(String[] args){ 
-	    //données, variables, différents traitements…
+	public static void main(String[] args) throws IOException{ 
 		//initialisation
 		Scanner scanner = new Scanner (System.in);
 		JFrame frame = new JFrame("FrameDemo");
@@ -48,19 +47,25 @@ public class ClasseMain {
 			//A utiliser pour les champ de tir:
 			Ship choosenShip = grilleJoueur.getShips().get(indexShip-1);
 			
-			//Récupération des coordonnées d'attaque
+			//RÃ©cupÃ©ration des coordonnÃ©es d'attaque
 			//A faire: prendre en compte de champ de tir
-			System.out.println("Entre les coordonnées d'attaque X et Y");
-			int posAttaqueX = scanner.nextInt();
-			while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
+			System.out.println("Entre les coordonnÃ©es d'attaque X et Y");
+			int posAttaqueX = 0;
+			int posAttaqueY = 0;
+			while(!choosenShip.chekShoot(grilleJoueur, posAttaqueX, posAttaqueY))
+			{
 				posAttaqueX = scanner.nextInt();
-			}
-			int posAttaqueY = scanner.nextInt();
-			while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
+				while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
+					posAttaqueX = scanner.nextInt();
+				}
 				posAttaqueY = scanner.nextInt();
+				while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
+					posAttaqueY = scanner.nextInt();
+				}
 			}
 			
-			//Vérification sur la grille adverse
+			
+			//VÃ©rification sur la grille adverse
 			if(grilleAdverse.cellIsEmpty(posAttaqueX, posAttaqueY)){
 				System.out.println("A l'eau !");
 				//bouger le bateau au choix
@@ -69,11 +74,11 @@ public class ClasseMain {
 					 moveShip(scanner,grilleJoueur,ship);
 				}
 			}else{
-				System.out.println("Touché !");
-				//savoir quel bateau est touché et agir en conséquence
+				System.out.println("TouchÃ© !");
+				//savoir quel bateau est touchÃ© et agir en consÃ©quence
 				grilleAdverse.update(posAttaqueX, posAttaqueY);
 				if(grilleAdverse.getShips().isEmpty()){
-					System.out.println("Le joueur " + joueur + " a gagné !");
+					System.out.println("Le joueur " + joueur + " a gagnÃ© !");
 					sleep();
 					run = false;
 				}else{
@@ -100,7 +105,7 @@ public class ClasseMain {
 	}  
 	
 	
-	//Permet de vérifier que la position soit inclue dans la grille
+	//Permet de vÃ©rifier que la position soit inclue dans la grille
 	public static boolean checkOutOfGrid(JFrame frame,int position, Grille grille){
 		if(position < 1 || position > grille.getSize()){
 			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+grille.getSize());
@@ -110,25 +115,25 @@ public class ClasseMain {
 		}
 	}	
 	
-	//Permet de vérifier les collisions
+	//Permet de vÃ©rifier les collisions
 	public static boolean detectCollision(JFrame frame,Ship ship, Grille grille){
-		//Case déjà occupée
+		//Case dÃ©jÃ  occupÃ©e
 		if(!grille.cellIsEmpty(ship.getPositionX(), ship.getPositionY()))
 		{
-			JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+			JOptionPane.showMessageDialog(frame,"Cette place est occupÃ©e");
 			return true;
 		}
 		//Pour le sens horizontal
 		if(ship.getSens() == 0){
-			//Verification que le bateau ne dépasse pas
+			//Verification que le bateau ne dÃ©passe pas
 			if(ship.getPositionX() + ship.getLongueur() - grille.getSize() > 0){
 				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
 				return true;
 			}
-			//Vérification qu'il n'y a rien aux places prévues par le bateau
+			//VÃ©rification qu'il n'y a rien aux places prÃ©vues par le bateau
 			for(int i=ship.getPositionX()+1;i<ship.getLongueur()+ship.getPositionX();i++){
 				if(grille.getGrille()[i][ship.getPositionY()]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					JOptionPane.showMessageDialog(frame,"Cette place est occupÃ©e");
 					return true;
 				}
 			}
@@ -140,7 +145,7 @@ public class ClasseMain {
 			}
 			for(int i=ship.getPositionY()+1;i<ship.getLongueur()+ship.getPositionY();i++){
 				if(grille.getGrille()[ship.getPositionX()][i]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					JOptionPane.showMessageDialog(frame,"Cette place est occupÃ©e");
 					return true;
 				}
 			}
@@ -148,8 +153,8 @@ public class ClasseMain {
 		return false;
 	}
 	
-	//Permet de vérifié le sens
-	//Permet de vérifier que l'utilisateur choisi bien 1 ou 0
+	//Permet de vÃ©rifiÃ© le sens
+	//Permet de vÃ©rifier que l'utilisateur choisi bien 1 ou 0
 	public static boolean checkSens(JFrame frame,int sens){
 		if(sens < 0 || sens > 1){
 			JOptionPane.showMessageDialog(frame,"Entre 0 pour horizontal et 1 pour vertical");
@@ -159,7 +164,7 @@ public class ClasseMain {
 		}
 	}
 	
-	//Initialise un bateau selon son type passé en paramètre
+	//Initialise un bateau selon son type passÃ© en paramÃ¨tre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
 		
 		System.out.print("Entre la position X et Y (entre 0 et "+ grille.getSize() +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
@@ -200,7 +205,7 @@ public class ClasseMain {
 			break;
 		}
 		//Fin de la factory
-		//Détection des collision
+		//DÃ©tection des collision
 		boolean temp = detectCollision(frame,ship,grille);
 		if(temp){
 			return initShip(scanner,frame,type,joueur,grille);
@@ -215,7 +220,7 @@ public class ClasseMain {
 		grille.show();
 		int type =1;
 		while(type<6){
-		//Création des 5 bateaux
+		//CrÃ©ation des 5 bateaux
 		Ship ship = initShip(scanner,frame,type,joueur,grille);
 		grille.add(ship);//try catch
 		grille.show();
@@ -223,12 +228,15 @@ public class ClasseMain {
 		}
 	}
 
+	//Zone de tir d'un bateau 
+	
 	//Bouger le beteau
 	public static Ship pickShip(Scanner scanner, Grille grille){
-		System.out.println("Voulez-vous bouger un bateau ? (y pour oui)1");
+		System.out.println("Voulez-vous bouger un bateau ? \n(O) Oui\n(N) Non");
 		String answer = scanner.next();
+		answer=answer.toUpperCase();
 		int indexShip = 99;
-		if(answer.substring(0, 1).equals("y")){
+		if(answer.substring(0, 1).equals("O")){
 			//Choix du bateau
 			while(indexShip>grille.getShips().size()){
 				System.out.println("Lequel ? (Entrez le chiffre correspondant):");
@@ -237,20 +245,25 @@ public class ClasseMain {
 			}
 			Ship ship = grille.getShips().get(indexShip-1);
 			return ship;
-		}else{
+		}
+		else if(answer.substring(0, 1).equals("N")){
 			return null;
+		}
+		else {
+			System.out.println("La lettre au clavier n'est pas valide" );
+			return pickShip(scanner,grille);
 		}
 	}
 	public static void moveShip(Scanner scanner, Grille grille, Ship ship){
-		System.out.println("Dans quelle direction ? z/q/s/d");
+		System.out.println("Dans quelle direction ? \n(G) Gauche\n(D) Droite\n(H) Haut\n(B) Bas");
 		String answer = scanner.next();
 		int delta = 0;
 		while(delta < 1 || delta > 2){
-			System.out.println("De combien de case ? 1/2");
+			System.out.println("De combien de case ? \n(1) Une case\n(2) Deux cases");
 			delta = scanner.nextInt();
 		}
-		switch(answer){
-			case "z": 
+		switch(answer.toUpperCase()){
+			case "H": 
 				if(!grille.checkMoveZ(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
@@ -263,7 +276,7 @@ public class ClasseMain {
 				}
 				break;
 
-			case "q":
+			case "G":
 				if(!grille.checkMoveQ(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
@@ -275,7 +288,7 @@ public class ClasseMain {
 					sleep();
 				}
 				break;
-			case "s":
+			case "B":
 				if(!grille.checkMoveS(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
@@ -288,7 +301,7 @@ public class ClasseMain {
 				}
 				break;
 				
-			case "d":
+			case "D":
 				if(!grille.checkMoveD(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
@@ -316,7 +329,7 @@ public class ClasseMain {
 			e.printStackTrace();
 		}
 	}
-	public static void clear(){
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	public static void clear() throws IOException{
+		Runtime.getRuntime().exec("clear");
 	}
 }

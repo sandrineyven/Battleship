@@ -224,7 +224,7 @@ public class Grille {
 		this.getGrille()[x][y] =Constante.emptyCell;
 	}
 	
-	//Enlève les points de vie et retire le bateau de la liste si nécessaire
+	//EnlÃ¨ve les points de vie et retire le bateau de la liste si nÃ©cessaire
 	//Selon le type de bateau
 	public void updatePdvByType(int type){
 		int index =0;
@@ -237,7 +237,7 @@ public class Grille {
 					//Efface tout le bateau sur ligne ou colonne
 					this.deleteShip(type);
 					
-					System.out.println("Le " + ship.getName() + "a été détruit");
+					System.out.println("Le " + ship.getName() + "a Ã©tÃ© dÃ©truit");
 				}
 				break;
 			};

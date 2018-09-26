@@ -1,4 +1,4 @@
-//Constante et propriétés du jeu
+//Constante et propriÃ©tÃ©s du jeu
 
 public class Constante {
 	//tag
@@ -8,7 +8,7 @@ public class Constante {
 	public static final String tag_sm = " SM ";
 	public static final String tag_to = " TO ";
 	public static final String emptyCell = "    ";	
-	//Propriétés
+	//PropriÃ©tÃ©s
 	//taille de la grille
 	public static final int gridSize = 9;
 	public static final int pointsDeVie = 2;

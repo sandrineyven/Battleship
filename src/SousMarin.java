@@ -1,4 +1,3 @@
-
 public class SousMarin extends Ship {
 	public SousMarin(int positionX, int positionY, int sens, int joueur){
 		this.type = 4;

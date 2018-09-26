@@ -1,4 +1,3 @@
-
 public abstract class Ship {
 	//id correcpondant au type du bateau
 	int type;
@@ -7,9 +6,9 @@ public abstract class Ship {
 	//Longueur du bateau
 	int longueur;
 	//longueur du champ de tir
-	int champdetir;
+		int champdetir;
 	//Nombre de points de vie (2 pour chaques bateaux)
-	int pointsdevie = Constante.pointsDeVie;
+	int pointsdevie =2;
 	//Position sur la grille de l'avant du bateau
 	int positionX;
 	int positionY;
@@ -39,7 +38,7 @@ public abstract class Ship {
 	}
 	public void setChampdetir(int champdetir) {
 		this.champdetir = champdetir;
-	}
+	}	
 	public int getPointsdevie() {
 		return pointsdevie;
 	}
@@ -65,4 +64,55 @@ public abstract class Ship {
 		this.sens = sens;
 	}
 	
+	
+	public boolean chekShoot(Grille grille,int posTX, int posTY)
+	{ 
+		boolean aRetourner=false;
+		for(int i=0; i<champdetir;i++)
+		{
+			//Bateau horizontal
+			if(sens==0)
+			{
+				//tir vers la gauche
+				if(positionX-i-1==posTX&&positionY==posTY)
+					aRetourner=true;
+				//tir vers la droite
+				if(positionX+longueur+i+1==posTX&&positionY==posTY)
+					aRetourner=true;
+				//tir vers haut et bas
+				for(int j= 0; j<longueur;j++)
+				{
+					//tir bas
+					if(positionX+j==posTX&&positionY+i==posTY)
+						aRetourner=true;
+					//tir haut
+					if(positionX+j==posTX&&positionY-i==posTY)
+						aRetourner=true;
+				}
+			}
+			//Bateau vertical
+			else 
+			{
+				//tir vers le haut
+				if(positionX==posTX&&positionY-i-1==posTY)
+					aRetourner=true;
+				//tir vers le bas
+				if(positionX==posTX&&positionY+longueur+i+1==posTY)
+					aRetourner=true;
+				//tir sur les cotes
+				for(int j= 0; j<longueur;j++)
+				{
+					//tir cote droit 
+					if(positionX+i==posTX&&positionY+j==posTY)
+						aRetourner=true;
+					//tir cote gauche
+					if(positionX-i==posTX&&positionY+j==posTY)
+						aRetourner=true;
+				}
+				
+			}
+				
+		}
+		return aRetourner;
+	}
 }
