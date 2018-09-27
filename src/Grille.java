@@ -56,19 +56,29 @@ public class Grille {
 		String tag = "  ";
 		switch(ship.type){
 			case 1: tag = Constante.tag_pa;
-				this.ships.add(ship);
+				if(this.ships.size()<5){
+					this.ships.add(ship);
+				}
 				break;
 			case 2: tag = Constante.tag_cr;
+			if(this.ships.size()<5){
 				this.ships.add(ship);
+			}
 				break;
 			case 3: tag = Constante.tag_ct;
+			if(this.ships.size()<5){
 				this.ships.add(ship);
+			}
 				break;
 			case 4: tag = Constante.tag_sm;
+			if(this.ships.size()<5){
 				this.ships.add(ship);
+			}
 				break;
 			case 5: tag = Constante.tag_to;
+			if(this.ships.size()<5){
 				this.ships.add(ship);
+			}
 				break;
 		}
 		this.grille[ship.positionX][ship.positionY]= tag;
