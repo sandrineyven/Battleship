@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 
 public class ClasseMain {
-	public static void main(String[] args) throws IOException{ 
+	public static void main(String[] args) { 
 		//initialisation
 		Scanner scanner = new Scanner (System.in);
 		JFrame frame = new JFrame("FrameDemo");
@@ -49,11 +49,11 @@ public class ClasseMain {
 			
 			//Récupération des coordonnées d'attaque
 			//A faire: prendre en compte de champ de tir
-			System.out.println("Entre les coordonnées d'attaque X et Y");
 			int posAttaqueX = 0;
 			int posAttaqueY = 0;
 			while(!choosenShip.chekShoot(grilleJoueur, posAttaqueX, posAttaqueY))
 			{
+				System.out.println("Entre les coordonnees d'attaque X et Y");
 				posAttaqueX = scanner.nextInt();
 				while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
 					posAttaqueX = scanner.nextInt();
@@ -75,7 +75,7 @@ public class ClasseMain {
 				}
 			}else{
 				System.out.println("Touché !");
-				//savoir quel bateau est touché et agir en conséquence
+				//savoir quel bateau est touché et agir en consequence
 				grilleAdverse.update(posAttaqueX, posAttaqueY);
 				if(grilleAdverse.getShips().isEmpty()){
 					System.out.println("Le joueur " + joueur + " a gagné !");
@@ -329,7 +329,7 @@ public class ClasseMain {
 			e.printStackTrace();
 		}
 	}
-	public static void clear() throws IOException{
-		Runtime.getRuntime().exec("clear");
+	public static void clear(){
+		System.out.println("\n\n\n\n\n");
 	}
 }
