@@ -203,31 +203,26 @@ public class Grille {
 	}
 
 
-	public void update(int x, int y){
+	public Ship update(int x, int y){
 		String tag = this.getGrille()[x][y];
 		switch(tag){
 		case Constante.tag_pa:
-			updatePdvByType(1);
-			break;
+			return updatePdvByType(1);
 		case Constante.tag_cr:
-			updatePdvByType(2);
-			break;
+			return updatePdvByType(2);
 		case Constante.tag_ct:
-			updatePdvByType(3);
-			break;
+			return updatePdvByType(3);
 		case Constante.tag_sm:
-			updatePdvByType(4);
-			break;
+			return updatePdvByType(4);
+		default:
 		case Constante.tag_to:
-			updatePdvByType(5);
-			break;
+			return updatePdvByType(5);
 		}
-		this.getGrille()[x][y] =Constante.emptyCell;
 	}
 	
 	//Enlève les points de vie et retire le bateau de la liste si nécessaire
 	//Selon le type de bateau
-	public void updatePdvByType(int type){
+	public Ship updatePdvByType(int type){
 		for (Ship ship : this.getShips()){
 			if(ship.getType() == type){
 				ship.setPointsdevie(ship.getPointsdevie()-1);
@@ -236,9 +231,10 @@ public class Grille {
 					this.deleteShip(type);
 					System.out.println("Le " + ship.getName() + "a ete detruit");
 				}
-				break;
+				return ship;
 			}
 		}
+		return null;
 	}
 	public boolean win()
 	{

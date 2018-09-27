@@ -81,9 +81,10 @@ public class ClasseMain {
 					 moveShip(scanner,grilleJoueur,ship);
 				}
 			}else{
-				System.out.println("Touche !");
 				//savoir quel bateau est touchÃ© et agir en consequence
-				grilleAdverse.update(posAttaqueX, posAttaqueY);
+				Ship shipTouch = grilleAdverse.update(posAttaqueX, posAttaqueY);
+				System.out.println("Le " + shipTouch.getName()+" a été touché.");
+				sleep();
 				if(grilleAdverse.win())
 				{
 					System.out.println("Le joueur " + joueur + " a gagne !");
