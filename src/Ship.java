@@ -83,10 +83,10 @@ public abstract class Ship {
 				for(int j= 0; j<longueur;j++)
 				{
 					//tir bas
-					if(positionX+j==posTX&&positionY+i==posTY)
+					if(positionX+j==posTX&&positionY+i+1==posTY)
 						aRetourner=true;
 					//tir haut
-					if(positionX+j==posTX&&positionY-i==posTY)
+					if(positionX+j==posTX&&positionY-i-1==posTY)
 						aRetourner=true;
 				}
 			}
@@ -103,10 +103,10 @@ public abstract class Ship {
 				for(int j= 0; j<longueur;j++)
 				{
 					//tir cote droit 
-					if(positionX+i==posTX&&positionY+j==posTY)
+					if(positionX+i+1==posTX&&positionY+j==posTY)
 						aRetourner=true;
 					//tir cote gauche
-					if(positionX-i==posTX&&positionY+j==posTY)
+					if(positionX-i-1==posTX&&positionY+j==posTY)
 						aRetourner=true;
 				}
 				
