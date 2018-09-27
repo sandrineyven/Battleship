@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,9 +39,14 @@ public class ClasseMain {
 			grilleJoueur.showShipsAlive();
 			//Choix du bateau pour tirer
 			int indexShip = 99;
-			while(indexShip>grilleJoueur.getShips().size()){
+			boolean choixBateau=false;
+			while(indexShip>grilleJoueur.getShips().size()&&!choixBateau){
 				System.out.println("Quel bateau pour tirer ? (Entrez le chiffre correspondant):");
 				indexShip = scanner.nextInt();
+				if(grilleJoueur.getShips().get(indexShip-1).getPointsdevie()==0)
+					System.out.println("Veuillez choisir un bateau de la liste");
+				else choixBateau=true;
+					
 			}
 			//A utiliser pour les champ de tir:
 			Ship choosenShip = grilleJoueur.getShips().get(indexShip-1);
@@ -62,6 +66,8 @@ public class ClasseMain {
 				while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
 					posAttaqueY = scanner.nextInt();
 				}
+				if(!choosenShip.chekShoot(grilleJoueur, posAttaqueX, posAttaqueY))
+					System.out.println("Vous ne pouvez pas tirer � cet emplacement avec ce bateau! ");
 			}
 			
 			
@@ -74,11 +80,11 @@ public class ClasseMain {
 					 moveShip(scanner,grilleJoueur,ship);
 				}
 			}else{
-				System.out.println("Touché !");
+				System.out.println("Touche !");
 				//savoir quel bateau est touché et agir en consequence
 				grilleAdverse.update(posAttaqueX, posAttaqueY);
 				if(grilleAdverse.getShips().isEmpty()){
-					System.out.println("Le joueur " + joueur + " a gagné !");
+					System.out.println("Le joueur " + joueur + " a gagne !");
 					sleep();
 					run = false;
 				}else{
@@ -120,7 +126,7 @@ public class ClasseMain {
 		//Case déjà occupée
 		if(!grille.cellIsEmpty(ship.getPositionX(), ship.getPositionY()))
 		{
-			JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+			JOptionPane.showMessageDialog(frame,"Cette place est occupee");
 			return true;
 		}
 		//Pour le sens horizontal
@@ -133,7 +139,7 @@ public class ClasseMain {
 			//Vérification qu'il n'y a rien aux places prévues par le bateau
 			for(int i=ship.getPositionX()+1;i<ship.getLongueur()+ship.getPositionX();i++){
 				if(grille.getGrille()[i][ship.getPositionY()]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					JOptionPane.showMessageDialog(frame,"Cette place est occupee");
 					return true;
 				}
 			}
@@ -145,7 +151,7 @@ public class ClasseMain {
 			}
 			for(int i=ship.getPositionY()+1;i<ship.getLongueur()+ship.getPositionY();i++){
 				if(grille.getGrille()[ship.getPositionX()][i]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupée");
+					JOptionPane.showMessageDialog(frame,"Cette place est occupee");
 					return true;
 				}
 			}
@@ -264,7 +270,7 @@ public class ClasseMain {
 		}
 		switch(answer.toUpperCase()){
 			case "H": 
-				if(!grille.checkMoveZ(ship,delta)){
+				if(!grille.checkMoveH(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
@@ -277,7 +283,7 @@ public class ClasseMain {
 				break;
 
 			case "G":
-				if(!grille.checkMoveQ(ship,delta)){
+				if(!grille.checkMoveG(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{
@@ -289,7 +295,7 @@ public class ClasseMain {
 				}
 				break;
 			case "B":
-				if(!grille.checkMoveS(ship,delta)){
+				if(!grille.checkMoveB(ship,delta)){
 					System.out.println("Mouvement impossible");
 					sleep();
 				}else{

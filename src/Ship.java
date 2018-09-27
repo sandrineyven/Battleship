@@ -70,9 +70,13 @@ public abstract class Ship {
 		boolean aRetourner=false;
 		for(int i=0; i<champdetir;i++)
 		{
+			
 			//Bateau horizontal
 			if(sens==0)
 			{
+				//tir sur sa place
+				if(positionX+i==posTX&&positionY==posTY)
+					aRetourner=true;
 				//tir vers la gauche
 				if(positionX-i-1==posTX&&positionY==posTY)
 					aRetourner=true;
@@ -93,6 +97,9 @@ public abstract class Ship {
 			//Bateau vertical
 			else 
 			{
+				//tir sur sa place
+				if(positionX==posTX&&positionY+i==posTY)
+					aRetourner=true;
 				//tir vers le haut
 				if(positionX==posTX&&positionY-i-1==posTY)
 					aRetourner=true;

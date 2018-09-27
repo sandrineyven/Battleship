@@ -94,11 +94,12 @@ public class Grille {
 	protected void showShipsAlive(){
 		for(int i =0; i<ships.size();i++){
 			int j=i+1;
-			System.out.println("(" + j + ")" + this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
+			if(ships.get(i).getPointsdevie()>0)
+				System.out.println("(" + j + ")" + this.ships.get(i).name + ": " + this.ships.get(i).pointsdevie + " pdv");
 		}
 	}
 
-	public boolean checkMoveZ(Ship ship, int delta){
+	public boolean checkMoveH(Ship ship, int delta){
 		if(ship.getPositionY()-delta < 0){
 			return false;
 		}
@@ -115,7 +116,7 @@ public class Grille {
 		}
 		return true;
 	}
-	public boolean checkMoveQ(Ship ship, int delta){
+	public boolean checkMoveG(Ship ship, int delta){
 		if(ship.getPositionX()-delta < 0){
 			return false;
 		}
@@ -133,7 +134,7 @@ public class Grille {
 		return true;
 	}
 	
-	public boolean checkMoveS(Ship ship, int delta){
+	public boolean checkMoveB(Ship ship, int delta){
 		if(ship.getPositionY()+delta > this.getSize()){
 			return false;
 		}
@@ -227,21 +228,16 @@ public class Grille {
 	//Enlève les points de vie et retire le bateau de la liste si nécessaire
 	//Selon le type de bateau
 	public void updatePdvByType(int type){
-		int index =0;
 		for (Ship ship : this.getShips()){
 			if(ship.getType() == type){
 				ship.setPointsdevie(ship.getPointsdevie()-1);
 				if(ship.getPointsdevie() == 0){
-					this.getShips().remove(index);
-
 					//Efface tout le bateau sur ligne ou colonne
 					this.deleteShip(type);
-					
-					System.out.println("Le " + ship.getName() + "a été détruit");
+					System.out.println("Le " + ship.getName() + "a ete detruit");
 				}
 				break;
-			};
-			index++;
-		};
+			}
+		}
 	}
 }
