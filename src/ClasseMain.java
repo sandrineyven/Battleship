@@ -84,11 +84,13 @@ public class ClasseMain {
 				System.out.println("Touche !");
 				//savoir quel bateau est touché et agir en consequence
 				grilleAdverse.update(posAttaqueX, posAttaqueY);
-				if(grilleAdverse.getShips().isEmpty()){
+				if(grilleAdverse.win())
+				{
 					System.out.println("Le joueur " + joueur + " a gagne !");
 					sleep();
 					run = false;
-				}else{
+				}
+				else{
 					//bouger le bateau au choix
 					Ship ship = pickShip(scanner, grilleJoueur);
 					if(ship != null){

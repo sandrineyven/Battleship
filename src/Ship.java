@@ -104,7 +104,6 @@ public abstract class Ship {
 				if(positionX==posTX&&positionY-i-1==posTY)
 					aRetourner=true;
 				//tir vers le bas
-				int temp=positionY+longueur+i+1;
 				if(positionX==posTX&&positionY+longueur+i==posTY)
 					aRetourner=true;
 				//tir sur les cotes
