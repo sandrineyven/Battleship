@@ -240,4 +240,15 @@ public class Grille {
 			}
 		}
 	}
+	public boolean win()
+	{
+		boolean gagner=false;
+		int compteur=0;
+		for(int i=0;i<ships.size();i++)
+			if(ships.get(i).pointsdevie==0)
+				compteur+=1;
+		if(compteur==ships.size())
+			gagner=true;
+		return gagner;
+	}
 }
