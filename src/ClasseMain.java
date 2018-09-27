@@ -1,13 +1,11 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 
 public class ClasseMain {
 	public static void main(String[] args) { 
 		//initialisation
 		Scanner scanner = new Scanner (System.in);
-		JFrame frame = new JFrame("FrameDemo");
 		
 		//Creation des grilles
 		int size = Constante.gridSize;
@@ -17,13 +15,13 @@ public class ClasseMain {
 		//init pour le joueur 1
 		System.out.println("Joueur 1:");
 		int joueur = 1;
-		initPlayer(scanner,frame,joueur,grilleJ1);
+		initPlayer(scanner,joueur,grilleJ1);
 
 		//init pour le joueur 2
 		clear();
 		System.out.println("Joueur 2:");
 		joueur = 2;
-		initPlayer(scanner,frame,joueur,grilleJ2);
+		initPlayer(scanner,joueur,grilleJ2);
 		clear();
 		
 		//Boucle de jeu
@@ -60,11 +58,11 @@ public class ClasseMain {
 			{
 				System.out.println("Entre les coordonnees d'attaque X et Y");
 				posAttaqueX = scanner.nextInt();
-				while(!checkOutOfGrid(frame,posAttaqueX,grilleJoueur)){
+				while(!checkOutOfGrid(posAttaqueX,grilleJoueur)){
 					posAttaqueX = scanner.nextInt();
 				}
 				posAttaqueY = scanner.nextInt();
-				while(!checkOutOfGrid(frame,posAttaqueY,grilleJoueur)){
+				while(!checkOutOfGrid(posAttaqueY,grilleJoueur)){
 					posAttaqueY = scanner.nextInt();
 				}
 				if(!choosenShip.chekShoot(grilleJoueur, posAttaqueX, posAttaqueY))
@@ -116,9 +114,9 @@ public class ClasseMain {
 	
 	
 	//Permet de vérifier que la position soit inclue dans la grille
-	public static boolean checkOutOfGrid(JFrame frame,int position, Grille grille){
+	public static boolean checkOutOfGrid(int position, Grille grille){
 		if(position < 1 || position > grille.getSize()){
-			JOptionPane.showMessageDialog(frame,"Entre un nombre entre 1 et "+grille.getSize());
+			System.out.println("Entre un nombre entre 1 et "+grille.getSize());
 			return false;
 		}else{
 			return true;
@@ -126,36 +124,36 @@ public class ClasseMain {
 	}	
 	
 	//Permet de vérifier les collisions
-	public static boolean detectCollision(JFrame frame,Ship ship, Grille grille){
+	public static boolean detectCollision(Ship ship, Grille grille){
 		//Case déjà occupée
 		if(!grille.cellIsEmpty(ship.getPositionX(), ship.getPositionY()))
 		{
-			JOptionPane.showMessageDialog(frame,"Cette place est occupee");
+			System.out.println("Cette place est occupee");
 			return true;
 		}
 		//Pour le sens horizontal
 		if(ship.getSens() == 0){
 			//Verification que le bateau ne dépasse pas
 			if(ship.getPositionX() + ship.getLongueur() - grille.getSize() > 0){
-				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
+				System.out.println("Le bateau est en dehors de la grille");
 				return true;
 			}
 			//Vérification qu'il n'y a rien aux places prévues par le bateau
 			for(int i=ship.getPositionX()+1;i<ship.getLongueur()+ship.getPositionX();i++){
 				if(grille.getGrille()[i][ship.getPositionY()]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupee");
+					System.out.println("Cette place est occupee");
 					return true;
 				}
 			}
 			//Meme chose pour le sens vertical
 		}else if(ship.getSens() == 1){
 			if(ship.getPositionY() + ship.getLongueur()-1 > grille.getSize()){
-				JOptionPane.showMessageDialog(frame,"Le bateau est en dehors de la grille");
+				System.out.println("Le bateau est en dehors de la grille");
 				return true;
 			}
 			for(int i=ship.getPositionY()+1;i<ship.getLongueur()+ship.getPositionY();i++){
 				if(grille.getGrille()[ship.getPositionX()][i]!=Constante.emptyCell){
-					JOptionPane.showMessageDialog(frame,"Cette place est occupee");
+					System.out.println("Cette place est occupee");
 					return true;
 				}
 			}
@@ -165,9 +163,9 @@ public class ClasseMain {
 	
 	//Permet de vérifié le sens
 	//Permet de vérifier que l'utilisateur choisi bien 1 ou 0
-	public static boolean checkSens(JFrame frame,int sens){
+	public static boolean checkSens(int sens){
 		if(sens < 0 || sens > 1){
-			JOptionPane.showMessageDialog(frame,"Entre 0 pour horizontal et 1 pour vertical");
+			System.out.println("Entre 0 pour horizontal et 1 pour vertical");
 			return false;
 		}else{
 			return true;
@@ -175,22 +173,22 @@ public class ClasseMain {
 	}
 	
 	//Initialise un bateau selon son type passé en paramètre
-	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
+	public static Ship initShip(Scanner scanner, int type, int joueur, Grille grille){
 		
 		System.out.print("Entre la position X et Y (entre 1 et "+ (grille.getSize()-1) +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
 		//Position X
 		int posX = scanner.nextInt();
-		while(!checkOutOfGrid(frame,posX,grille)){
+		while(!checkOutOfGrid(posX,grille)){
 			posX = scanner.nextInt();
 		}
 		//Position Y
 		int posY = scanner.nextInt();
-		while(!checkOutOfGrid(frame,posY,grille)){
+		while(!checkOutOfGrid(posY,grille)){
 			posY = scanner.nextInt();
 		}
 		//Sens 
 		int sens = scanner.nextInt();
-		while(checkSens(frame,sens)==false){
+		while(checkSens(sens)==false){
 			sens = scanner.nextInt();
 		}
 		//Factory
@@ -216,22 +214,22 @@ public class ClasseMain {
 		}
 		//Fin de la factory
 		//Détection des collision
-		boolean temp = detectCollision(frame,ship,grille);
+		boolean temp = detectCollision(ship,grille);
 		if(temp){
-			return initShip(scanner,frame,type,joueur,grille);
+			return initShip(scanner,type,joueur,grille);
 		}else{
 			return ship;
 		}
 	}
 
 	//Initialisation du joueur
-	public static void initPlayer(Scanner scanner, JFrame frame, int joueur, Grille grille){
+	public static void initPlayer(Scanner scanner, int joueur, Grille grille){
 		
 		grille.show();
 		int type =1;
 		while(type<6){
 		//Création des 5 bateaux
-		Ship ship = initShip(scanner,frame,type,joueur,grille);
+		Ship ship = initShip(scanner,type,joueur,grille);
 		grille.add(ship);//try catch
 		grille.show();
 		type++;
@@ -270,7 +268,7 @@ public class ClasseMain {
 		int delta = 0;
 		while(delta < 1 || delta > 2){
 			System.out.println("De combien de case ? \n(1) Une case\n(2) Deux cases");
-			delta = scanner.nextInt();
+				    delta = scanner.nextInt();
 		}
 		switch(answer.toUpperCase()){
 			case "H": 
