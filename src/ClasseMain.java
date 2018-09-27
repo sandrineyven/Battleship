@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -39,8 +38,13 @@ public class ClasseMain {
 			int indexShip = 99;
 			boolean choixBateau=false;
 			while((indexShip>grilleJoueur.getShips().size()&&indexShip>0)||!choixBateau){
-				System.out.println("Quel bateau pour tirer ? (Entrez le chiffre correspondant):");
-				indexShip = scanner.nextInt();
+				String input = "";
+				while(!input.equals("1") && !input.equals("2")&& !input.equals("3") && !input.equals("4") && !input.equals("5")){
+					System.out.println("Quel bateau pour tirer ? (Entrez le chiffre correspondant):");
+					input = scanner.next();
+				}
+				indexShip = Integer.parseInt(input);
+				
 				if(indexShip>=1&&indexShip<=5)
 					if(grilleJoueur.getShips().get(indexShip-1).getPointsdevie()==0)
 						System.out.println("Veuillez choisir un bateau de la liste");
@@ -230,13 +234,11 @@ public class ClasseMain {
 		while(type<6){
 		//Création des 5 bateaux
 		Ship ship = initShip(scanner,type,joueur,grille);
-		grille.add(ship);//try catch
+		grille.add(ship);
 		grille.show();
 		type++;
 		}
 	}
-
-	//Zone de tir d'un bateau 
 	
 	//Bouger le beteau
 	public static Ship pickShip(Scanner scanner, Grille grille){
@@ -247,10 +249,16 @@ public class ClasseMain {
 		if(answer.substring(0, 1).equals("O")){
 			//Choix du bateau
 			while(indexShip>grille.getShips().size()){
-				System.out.println("Lequel ? (Entrez le chiffre correspondant):");
-				grille.showShipsAlive();
-				indexShip = scanner.nextInt();
+				String input = "";
+				while(!input.equals("1") && !input.equals("2")&& !input.equals("3") && !input.equals("4") && !input.equals("5")){
+					System.out.println("Lequel ? (Entrez le chiffre correspondant):");
+					grille.showShipsAlive();
+					input = scanner.next();
+				}
+				indexShip = Integer.parseInt(input);
+
 			}
+			
 			Ship ship = grille.getShips().get(indexShip-1);
 			return ship;
 		}
@@ -263,13 +271,18 @@ public class ClasseMain {
 		}
 	}
 	public static void moveShip(Scanner scanner, Grille grille, Ship ship){
-		System.out.println("Dans quelle direction ? \n(G) Gauche\n(D) Droite\n(H) Haut\n(B) Bas");
-		String answer = scanner.next();
-		int delta = 0;
-		while(delta < 1 || delta > 2){
-			System.out.println("De combien de case ? \n(1) Une case\n(2) Deux cases");
-				    delta = scanner.nextInt();
+		String answer = "";
+		while(!answer.toUpperCase().equals("H") && !answer.toUpperCase().equals("B") && !answer.toUpperCase().equals("D") && !answer.toUpperCase().equals("G")){
+			System.out.println("Dans quelle direction ? \n(G) Gauche\n(D) Droite\n(H) Haut\n(B) Bas");
+			 answer = scanner.next();
 		}
+
+		String input = "";
+		while(!input.equals("1") && !input.equals("2")){
+			System.out.println("De combien de case ? \n(1) Une case\n(2) Deux cases");
+			input = scanner.next();
+		}
+		int delta = Integer.parseInt(input);
 		switch(answer.toUpperCase()){
 			case "H": 
 				if(!grille.checkMoveH(ship,delta)){
