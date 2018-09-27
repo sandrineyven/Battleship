@@ -40,11 +40,12 @@ public class ClasseMain {
 			//Choix du bateau pour tirer
 			int indexShip = 99;
 			boolean choixBateau=false;
-			while(indexShip>grilleJoueur.getShips().size()&&!choixBateau){
+			while((indexShip>grilleJoueur.getShips().size()&&indexShip>0)||!choixBateau){
 				System.out.println("Quel bateau pour tirer ? (Entrez le chiffre correspondant):");
 				indexShip = scanner.nextInt();
-				if(grilleJoueur.getShips().get(indexShip-1).getPointsdevie()==0)
-					System.out.println("Veuillez choisir un bateau de la liste");
+				if(indexShip>=1&&indexShip<=5)
+					if(grilleJoueur.getShips().get(indexShip-1).getPointsdevie()==0)
+						System.out.println("Veuillez choisir un bateau de la liste");
 				else choixBateau=true;
 					
 			}
@@ -173,7 +174,7 @@ public class ClasseMain {
 	//Initialise un bateau selon son type passé en paramètre
 	public static Ship initShip(Scanner scanner, JFrame frame, int type, int joueur, Grille grille){
 		
-		System.out.print("Entre la position X et Y (entre 0 et "+ grille.getSize() +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
+		System.out.print("Entre la position X et Y (entre 1 et "+ (grille.getSize()-1) +")\n et le sens (0:horizontal 1: vertical) de l'avant du bateau:");  
 		//Position X
 		int posX = scanner.nextInt();
 		while(!checkOutOfGrid(frame,posX,grille)){

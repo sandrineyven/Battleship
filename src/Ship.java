@@ -68,7 +68,7 @@ public abstract class Ship {
 	public boolean chekShoot(Grille grille,int posTX, int posTY)
 	{ 
 		boolean aRetourner=false;
-		for(int i=0; i<champdetir;i++)
+		for(int i=0; i<champdetir&&!aRetourner;i++)
 		{
 			
 			//Bateau horizontal
@@ -81,10 +81,10 @@ public abstract class Ship {
 				if(positionX-i-1==posTX&&positionY==posTY)
 					aRetourner=true;
 				//tir vers la droite
-				if(positionX+longueur+i+1==posTX&&positionY==posTY)
+				if(positionX+longueur+i==posTX&&positionY==posTY)
 					aRetourner=true;
 				//tir vers haut et bas
-				for(int j= 0; j<longueur;j++)
+				for(int j= 0; j<longueur&&!aRetourner;j++)
 				{
 					//tir bas
 					if(positionX+j==posTX&&positionY+i+1==posTY)
@@ -104,10 +104,11 @@ public abstract class Ship {
 				if(positionX==posTX&&positionY-i-1==posTY)
 					aRetourner=true;
 				//tir vers le bas
-				if(positionX==posTX&&positionY+longueur+i+1==posTY)
+				int temp=positionY+longueur+i+1;
+				if(positionX==posTX&&positionY+longueur+i==posTY)
 					aRetourner=true;
 				//tir sur les cotes
-				for(int j= 0; j<longueur;j++)
+				for(int j= 0; j<longueur&&!aRetourner;j++)
 				{
 					//tir cote droit 
 					if(positionX+i+1==posTX&&positionY+j==posTY)
